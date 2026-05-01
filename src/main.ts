@@ -186,10 +186,16 @@ export default class AgentTrafficPlugin extends Plugin {
    * Returns the ATC view ONLY when it's the currently focused leaf.
    * Used by hotkey-scoped commands so pressing N/R/H/P while typing in
    * an unrelated note doesn't fire ATC actions.
+   *
+   * We compare by view-type string rather than `getActiveViewOfType` because
+   * class identity gets confused after plugin hot-reload (BRAT updates).
    */
   focusedView(): AgentTrafficView | null {
-    const view = this.app.workspace.getActiveViewOfType(AgentTrafficView);
-    return view ?? null;
+    const leaf = this.app.workspace.activeLeaf;
+    if (!leaf) return null;
+    const view = leaf.view as { getViewType?: () => string } | null;
+    if (view?.getViewType?.() !== VIEW_TYPE_AGENT_TRAFFIC) return null;
+    return leaf.view as AgentTrafficView;
   }
 
   selectedStrip(view: AgentTrafficView | null): Strip | null {
