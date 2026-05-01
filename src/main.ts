@@ -47,7 +47,7 @@ export default class AgentTrafficPlugin extends Plugin {
       id: "create-strip",
       name: "Create new strip",
       checkCallback: (checking) => {
-        const view = this.activeView();
+        const view = this.focusedView();
         if (!view) return false;
         if (!checking) view.openCreateStripModal();
         return true;
@@ -59,7 +59,7 @@ export default class AgentTrafficPlugin extends Plugin {
       id: "resume-prompt",
       name: "Generate resume prompt",
       checkCallback: (checking) => {
-        const view = this.activeView();
+        const view = this.focusedView();
         const strip = this.selectedStrip(view);
         if (!view || !strip) return false;
         if (!checking) view.openPromptModal("resume", strip);
@@ -72,7 +72,7 @@ export default class AgentTrafficPlugin extends Plugin {
       id: "handoff-prompt",
       name: "Generate handoff prompt",
       checkCallback: (checking) => {
-        const view = this.activeView();
+        const view = this.focusedView();
         const strip = this.selectedStrip(view);
         if (!view || !strip) return false;
         if (!checking) view.openPromptModal("handoff", strip);
@@ -108,7 +108,7 @@ export default class AgentTrafficPlugin extends Plugin {
       id: "park-strip",
       name: "Park selected strip",
       checkCallback: (checking) => {
-        const view = this.activeView();
+        const view = this.focusedView();
         const strip = this.selectedStrip(view);
         if (!view || !strip) return false;
         if (!checking) void view.parkStrip(strip);
@@ -180,6 +180,16 @@ export default class AgentTrafficPlugin extends Plugin {
     const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_AGENT_TRAFFIC);
     if (leaves.length === 0) return null;
     return leaves[0].view as AgentTrafficView;
+  }
+
+  /**
+   * Returns the ATC view ONLY when it's the currently focused leaf.
+   * Used by hotkey-scoped commands so pressing N/R/H/P while typing in
+   * an unrelated note doesn't fire ATC actions.
+   */
+  focusedView(): AgentTrafficView | null {
+    const view = this.app.workspace.getActiveViewOfType(AgentTrafficView);
+    return view ?? null;
   }
 
   selectedStrip(view: AgentTrafficView | null): Strip | null {
