@@ -1,0 +1,28 @@
+# build artifacts
+main.js
+*.js.map
+
+# dependencies
+node_modules/
+
+# typescript build
+build/
+dist/
+
+# logs / system
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# editor
+.vscode/
+.idea/
+
+# obsidian local install symlink
+data.json
+
+# test snapshots scratch
+tests/.tmp/
+tests/lib-entry.ts
+tests/obsidian-stub.cjs

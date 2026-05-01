@@ -1,0 +1,10 @@
+{
+  "id": "agent-traffic-control",
+  "name": "Agent Traffic Control",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Local-first ATC board for parallel LLM agent sessions, backed by a single markdown file in your vault.",
+  "author": "Pieter van Schalkwyk",
+  "authorUrl": "https://xmpro.com",
+  "isDesktopOnly": false
+}
