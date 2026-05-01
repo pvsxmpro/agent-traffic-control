@@ -44,9 +44,12 @@ export class CreateStripModal extends Modal {
 
     new Setting(contentEl)
       .setName("Callsign")
-      .setDesc("Short uppercase id, e.g. PIPE-04")
+      .setDesc("Uppercase letters, digits, dashes or underscores — no spaces or punctuation. Example: ATC-PLUG")
       .addText((t) =>
-        t.setValue(this.values.callsign).onChange((v) => (this.values.callsign = v.toUpperCase())),
+        t
+          .setPlaceholder("ATC-PLUG")
+          .setValue(this.values.callsign)
+          .onChange((v) => (this.values.callsign = v.toUpperCase())),
       );
 
     new Setting(contentEl).setName("Sector").addDropdown((d) => {
@@ -59,15 +62,24 @@ export class CreateStripModal extends Modal {
       d.setValue(this.values.controller).onChange((v) => (this.values.controller = v));
     });
 
-    new Setting(contentEl).setName("Title").addText((t) =>
-      t.setValue(this.values.title).onChange((v) => (this.values.title = v)),
-    );
+    new Setting(contentEl)
+      .setName("Title")
+      .setDesc("One-line objective. Example: Refactor orchestration service and rerun tests")
+      .addText((t) =>
+        t
+          .setPlaceholder("Refactor orchestration service and rerun tests")
+          .setValue(this.values.title)
+          .onChange((v) => (this.values.title = v)),
+      );
 
     new Setting(contentEl)
       .setName("Next action")
-      .setDesc("Required when promoting to Active. Optional in Inbound.")
+      .setDesc("Smallest concrete thing you can do right now — verb-led, ~1 hour or less. Optional in Inbound; required when you drag to Active.")
       .addText((t) =>
-        t.setValue(this.values.next).onChange((v) => (this.values.next = v)),
+        t
+          .setPlaceholder("Run the test suite and capture failing edge cases")
+          .setValue(this.values.next)
+          .onChange((v) => (this.values.next = v)),
       );
 
     const row = contentEl.createDiv({ cls: "atc-button-row" });
@@ -80,7 +92,7 @@ export class CreateStripModal extends Modal {
 
   private submit(): void {
     if (!this.values.callsign.match(/^[A-Z0-9][A-Z0-9_-]*$/)) {
-      new Notice("Callsign must be uppercase letters, digits, dashes or underscores.");
+      new Notice("Callsign needs uppercase letters, digits, dashes or underscores only — no spaces or punctuation. Example: ATC-PLUG");
       return;
     }
     if (this.values.title.trim() === "") {
@@ -101,7 +113,7 @@ export class CreateStripModal extends Modal {
       tags: [],
       status: "executing",
       extra_content: [],
-      source_order: Number.MAX_SAFE_INTEGER, // appended; serializer re-stamps
+      source_order: Number.MAX_SAFE_INTEGER,
       checked: false,
     };
     this.onSubmit(strip);
