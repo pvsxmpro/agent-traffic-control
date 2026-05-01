@@ -43,6 +43,9 @@ export default class AgentTrafficPlugin extends Plugin {
       callback: () => { void this.openBoard(); },
     });
 
+    // No default hotkeys — single-letter assignments swallow keystrokes in the
+    // editor even when the command's checkCallback returns false. Users can
+    // bind their own hotkeys in Settings → Hotkeys with proper modifiers.
     this.addCommand({
       id: "create-strip",
       name: "Create new strip",
@@ -52,7 +55,6 @@ export default class AgentTrafficPlugin extends Plugin {
         if (!checking) view.openCreateStripModal();
         return true;
       },
-      hotkeys: [{ modifiers: [], key: "n" }],
     });
 
     this.addCommand({
@@ -65,7 +67,6 @@ export default class AgentTrafficPlugin extends Plugin {
         if (!checking) view.openPromptModal("resume", strip);
         return true;
       },
-      hotkeys: [{ modifiers: [], key: "r" }],
     });
 
     this.addCommand({
@@ -78,7 +79,6 @@ export default class AgentTrafficPlugin extends Plugin {
         if (!checking) view.openPromptModal("handoff", strip);
         return true;
       },
-      hotkeys: [{ modifiers: [], key: "h" }],
     });
 
     this.addCommand({
@@ -114,7 +114,6 @@ export default class AgentTrafficPlugin extends Plugin {
         if (!checking) void view.parkStrip(strip);
         return true;
       },
-      hotkeys: [{ modifiers: [], key: "p" }],
     });
 
     this.addCommand({
